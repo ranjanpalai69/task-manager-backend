@@ -1,13 +1,17 @@
+require("dotenv").config();
 const express=require("express");
 const cors=require("cors");
 const { userRouter } = require("./routes/user.routes");
 const { taskRouter } = require("./routes/task.routes");
 const { connection } = require("./config/database");
-require("dotenv").config();
+
 
 const PORT=process.env.PORT || 8081
 const app=express();
-app.use(cors())
+app.use(cors({
+    origin: "*",
+    credentials: true,
+  }))
 app.use(express.json());
 
 
