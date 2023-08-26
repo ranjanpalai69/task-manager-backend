@@ -51,7 +51,7 @@ const updateTask=async(req,res)=>{
     title,description,status,userId:req.userId
    }
    try {
-    await Task.findByIdAndUpdate(id, newTask,{new:true});
+    await Task.findByIdAndUpdate(id, {...newTask,_id:id},{new:true});
     res.status(200).json({message:"Task updated successfully",data:{...newTask,_id:id}});
    } catch (error) {
     console.log(error);
