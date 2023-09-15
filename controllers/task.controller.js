@@ -1,15 +1,37 @@
 const Task = require("../models/task.model")
 
 // get users all task according to user id 
-const getTasks=async(req,res)=>{
-    try{
-     const tasks=await Task.find({userId:req.userId});
-     res.status(200).json(tasks);
-    }catch(error){
-    console.log(error);
-    res.status(500).json({message:"something went wrong",error}) 
+
+const getTasks = async (req, res) => {
+  try {
+    const { search, status, page, limit } = req.query;
+    const query = { userId: req.userId };
+    
+    // Add search filter if a search query is provided
+    if (search) {
+      query.title = { $regex: new RegExp(search, 'i') };
     }
-}
+    
+    // Add status filter if a status is provided
+    if (status) {
+      query.status = status;
+    }
+
+    const options = {
+      page: page ? parseInt(page) : 1,
+      limit: limit ? parseInt(limit) : 5,
+      sort: { createdAt: -1 }, // Sort by createdAt in descending order
+    };
+
+    const tasks = await Task.paginate(query, options);
+
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong", error });
+  }
+};
+
 
 // get particular task by task id 
 const getTaskById = async (req, res) => {
