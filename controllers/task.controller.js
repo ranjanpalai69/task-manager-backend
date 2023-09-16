@@ -19,9 +19,8 @@ const getTasks = async (req, res) => {
 
     const options = {
       page: page ? parseInt(page) : 1,
-      limit: limit ? parseInt(limit) : 5,
-      sort: { createdAt: -1 }, // Sort by createdAt in descending order
-    };
+      limit: limit ? parseInt(limit) : 5
+  };
 
     const tasks = await Task.paginate(query, options);
 
